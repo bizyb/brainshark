@@ -1,5 +1,6 @@
 import requests
 import os
+import shutil
 import uuid
 
 
@@ -115,7 +116,20 @@ def download(url):
 
             # cd back to the parent directory
             os.chdir("..")
+            break
 
-    return None
+        # go back to project root
+        os.chdir("..")
+
+        # compress the file
+        archive = "Archive"
+        try:
+            os.mkdir(archive)
+        except OSError as e:
+            print archive + " directory already exists"
+        os.chdir(archive)
+        zip_name = parent_folder.replace("-", "_").replace(" ", "_")
+        shutil.make_archive(zip_name, 'zip', "../" + parent_folder)
+        os.chdir("..")
 
 download("https://www.brainshark.com/1/player/en/mstc?pi=zD9zi8nUjz0z0&fb=0")
